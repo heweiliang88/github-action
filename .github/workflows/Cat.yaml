@@ -1,0 +1,17 @@
+name: Random Cat Image
+on:
+  workflow_dispatch:
+jobs:
+  cat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Cat Image
+        run: |
+          curl https://api.thecatapi.com/v1/images/search -o cat.json
+          IMG_URL=$(jq -r '.[0].url' cat.json)
+          curl -s $IMG_URL -o cat.jpg
+      - name: Upload as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: random-cat
+          path: cat.jpg
